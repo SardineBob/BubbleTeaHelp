@@ -41,8 +41,15 @@ signal player_died
 
 
 func _ready() -> void:
+	add_to_group("player")
 	print("玩家已生成，位置：", global_position)
 	hp_changed.emit(hp, max_hp)
+
+
+# ── PLAYER-07：經驗值獲取（供 PickupItem 呼叫）────────────
+## 獲得 XP，具體升級邏輯待 LEVEL-UP 系統實作
+func add_xp(amount: float) -> void:
+	print("[PLAYER-07] 獲得 XP：", amount)
 
 
 func _physics_process(delta: float) -> void:
