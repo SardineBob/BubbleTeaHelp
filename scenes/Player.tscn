@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://player_scene_001"]
+
+[ext_resource type="Script" path="res://scripts/Player.gd" id="1_player_script"]
+
+[sub_resource type="RectangleShape2D" id="1_collision_shape"]
+size = Vector2(32, 48)
+
+[sub_resource type="ColorRect" id="2_color_rect"]
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_player_script")
+
+[node name="Sprite" type="ColorRect" parent="."]
+## 玩家的視覺表示：珍珠奶茶棕色的方塊
+offset_left = -16.0
+offset_top = -24.0
+offset_right = 16.0
+offset_bottom = 24.0
+color = Color(0.502, 0.333, 0.169, 1.0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+## 玩家的碰撞形狀，與視覺大小對齊
+shape = SubResource("1_collision_shape")

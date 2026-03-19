@@ -1,0 +1,26 @@
+# Godot 4 專案 .gitignore
+# 忽略 Godot 自動產生的暫存檔案與資料夾
+
+# Godot 匯入快取
+.import/
+.godot/
+
+# 匯出資料夾（建置輸出）
+export/
+exports/
+build/
+
+# 作業系統產生的檔案
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 編輯器設定（選擇性忽略，視團隊需求而定）
+# .editorconfig
+
+# Godot 暫存與鎖定檔案
+*.tmp
+*.lock
+
+# 除錯與日誌檔案
+*.log

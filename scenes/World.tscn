@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://world_scene_001"]
+
+[ext_resource type="Script" path="res://scripts/World.gd" id="1_world_script"]
+
+[node name="World" type="Node2D"]
+## 世界場景根節點
+## World.gd 將在 _ready() 時動態生成玩家於畫面中央
+script = ExtResource("1_world_script")
+
+[node name="Background" type="ColorRect" parent="."]
+## 背景：淺米色，代表地圖底色
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0.949, 0.929, 0.878, 1.0)
+z_index = -1
+
+[node name="Camera2D" type="Camera2D" parent="."]
+## 主攝影機，預設跟隨視窗中心
+## 若需跟隨玩家，可在 World.gd 中將 camera.reparent(_player)
+position = Vector2(640, 360)
