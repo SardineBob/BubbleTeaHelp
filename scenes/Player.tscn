@@ -6,15 +6,11 @@
 radius = 22.0
 
 [node name="Player" type="CharacterBody2D"]
-## 玩家主體節點
-## collision_layer 1 = Player 層
-## collision_mask  2 = Enemy 層（偵測敵人碰撞）
 script = ExtResource("1_player_script")
 collision_layer = 1
 collision_mask = 2
 
 [node name="Sprite" type="ColorRect" parent="."]
-## 玩家視覺：珍珠奶茶棕色方塊
 offset_left = -16.0
 offset_top = -22.0
 offset_right = 16.0
@@ -22,5 +18,4 @@ offset_bottom = 22.0
 color = Color(0.502, 0.333, 0.169, 1.0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-## 圓形碰撞區域，半徑 22 px（PLAYER-04 規格）
 shape = SubResource("1_collision_shape")

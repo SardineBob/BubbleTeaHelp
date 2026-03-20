@@ -6,9 +6,6 @@
 radius = 8.0
 
 [node name="PickupItem" type="Area2D"]
-## 掉落物節點
-## collision_layer 8 = Pickup 層
-## collision_mask  1 = Player 層（偵測玩家碰撞）
 collision_layer = 8
 collision_mask = 1
 monitoring = true
@@ -18,7 +15,6 @@ script = ExtResource("1_pickup_script")
 shape = SubResource("CircleShape2D_1")
 
 [node name="Sprite" type="ColorRect" parent="."]
-## 掉落物視覺：黃色小方塊
 offset_left = -5.0
 offset_top = -5.0
 offset_right = 5.0

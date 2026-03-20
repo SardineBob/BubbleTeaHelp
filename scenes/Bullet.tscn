@@ -6,9 +6,6 @@
 radius = 5.0
 
 [node name="Bullet" type="Area2D"]
-## 子彈節點
-## collision_layer 4 = Bullet 層
-## collision_mask  2 = Enemy 層（偵測敵人碰撞）
 collision_layer = 4
 collision_mask = 2
 monitoring = true
@@ -18,7 +15,6 @@ script = ExtResource("1_bullet_script")
 shape = SubResource("CircleShape2D_1")
 
 [node name="Sprite" type="ColorRect" parent="."]
-## 子彈視覺：橙色小方塊
 offset_left = -4.0
 offset_top = -4.0
 offset_right = 4.0

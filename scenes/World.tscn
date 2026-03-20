@@ -3,15 +3,12 @@
 [ext_resource type="Script" path="res://scripts/World.gd" id="1_world_script"]
 
 [node name="World" type="Node2D"]
-## 世界場景根節點
-## World.gd 將在 _ready() 時動態生成玩家於畫面中央
 script = ExtResource("1_world_script")
 
 [node name="Background" type="ColorRect" parent="."]
-## 背景：淺米色，覆蓋完整 3200x3200 地圖（修正 #65 空白畫面）
 offset_left = 0.0
 offset_top = 0.0
 offset_right = 3200.0
 offset_bottom = 3200.0
-color = Color(0.949, 0.929, 0.878, 1.0)
+color = Color(0.22, 0.45, 0.18, 1.0)
 z_index = -1
