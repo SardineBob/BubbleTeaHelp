@@ -214,6 +214,10 @@ func _process(delta: float) -> void:
 
 	_game_time += delta
 
+	# HUD-04：更新計時器
+	if _hud != null and _hud.has_method("update_timer"):
+		_hud.update_timer(_game_time)
+
 	# DIFF-02：每秒更新難度
 	_diff_timer += delta
 	if _diff_timer >= 1.0:
@@ -481,12 +485,18 @@ func spawn_boss_lady_cup(from_pos: Vector2, target_pos: Vector2) -> void:
 
 # ── HUD 信號回呼 ─────────────────────────────────────────
 func _on_hp_changed(current: float, maximum: float) -> void:
-	pass  ## HUD-01：HP 血條更新由 HUD 場景監聽 hp_changed 信號
+	## HUD-01：HP 血條更新
+	if _hud != null and _hud.has_method("update_hp"):
+		_hud.update_hp(current, maximum)
 
 
 func _on_xp_changed(current: float, needed: float, lv: int) -> void:
-	pass  ## HUD-02：XP 條更新
+	## HUD-02：XP 條更新
+	if _hud != null and _hud.has_method("update_xp"):
+		_hud.update_xp(current, needed, lv)
 
 
 func _on_kill_count_changed(count: int) -> void:
-	pass  ## HUD-03：擊殺計數更新
+	## HUD-03：擊殺計數更新
+	if _hud != null and _hud.has_method("update_kill_count"):
+		_hud.update_kill_count(count)
