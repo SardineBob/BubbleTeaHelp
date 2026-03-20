@@ -6,6 +6,7 @@
 ## COMBAT-04：減速效果施加
 ## COMBAT-06：子彈超出地圖範圍自動消失
 ## WEAPON-04：追蹤型子彈持續修正飛行方向
+## ENEMY-08-FIX：is_enemy_bullet=true 時改為對 player 群組造成傷害
 
 extends Area2D
 
@@ -31,6 +32,10 @@ extends Area2D
 @export var homing: bool = false
 ## 最大轉向角速度（弧度/秒）
 @export var homing_turn_speed: float = 2.5
+
+# ── ENEMY-08-FIX：敵人子彈標記 ─────────────────────────
+## true = 此子彈由敵人發射，命中 player 群組；false = 玩家子彈，命中 enemy 群組
+@export var is_enemy_bullet: bool = false
 
 # ── COMBAT-06：地圖邊界（由 World 設定）────────────────────
 ## 地圖邊界：3200 x 3200，超出邊界 100 px 消失
@@ -99,6 +104,15 @@ func _update_homing(delta: float) -> void:
 
 # ── COMBAT-01/02：碰撞體偵測（Enemy 是 CharacterBody2D，需用 body_entered）
 func _on_body_entered(body: Node) -> void:
+	# ENEMY-08-FIX：敵人子彈只傷害玩家，不傷害敵人
+	if is_enemy_bullet:
+		if not body.is_in_group("player"):
+			return
+		if body.has_method("take_damage"):
+			body.take_damage(damage)
+		queue_free()
+		return
+
 	if not body.is_in_group("enemy"):
 		return
 

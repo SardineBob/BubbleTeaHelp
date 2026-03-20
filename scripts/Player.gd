@@ -324,6 +324,9 @@ func unlock_weapon_by_time(minutes_survived: float) -> void:
 	## WEAPON-05：生存 15 分鐘解鎖燕麥珍珠
 	if minutes_survived >= 15.0 and not _weapon_unlocked["oat"]:
 		_unlock_weapon("oat")
+	## WEAPON-05：生存 20 分鐘解鎖草莓珍珠（追蹤型）
+	if minutes_survived >= 20.0 and not _weapon_unlocked["strawberry"]:
+		_unlock_weapon("strawberry")
 
 
 # ── WEAPON-06：加入武器（透過升級卡選擇）────────────────

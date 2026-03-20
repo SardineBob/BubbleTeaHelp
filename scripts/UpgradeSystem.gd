@@ -24,6 +24,7 @@ const UPGRADES: Array[Dictionary] = [
 	{"id": "taro",         "name": "芋頭珍珠",   "desc": "新武器：霰彈×3",              "max_level": 1, "rarity": "rare"},
 	{"id": "popping_boba", "name": "黑糖爆爆珠", "desc": "新武器：爆炸傷害 3",          "max_level": 1, "rarity": "epic"},
 	{"id": "oat",          "name": "燕麥珍珠",   "desc": "新武器：穿透快速連射",        "max_level": 1, "rarity": "rare"},
+	{"id": "strawberry",   "name": "草莓珍珠",   "desc": "新武器：追蹤敵人（生存20分解鎖）", "max_level": 1, "rarity": "epic"},
 ]
 
 # ── 當前升級等級追蹤 ──────────────────────────────────────

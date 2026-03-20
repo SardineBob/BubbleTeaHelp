@@ -678,6 +678,8 @@ func spawn_boss_lady_cup(from_pos: Vector2, target_pos: Vector2) -> void:
 	cup.set("damage", 10.0)
 	cup.set("max_range", 600.0)
 	cup.set("map_bounds", Rect2(Vector2.ZERO, MAP_SIZE))
+	# ENEMY-08-FIX：標記為敵人子彈，命中 player 群組
+	cup.set("is_enemy_bullet", true)
 
 
 # ── HUD 信號回呼 ─────────────────────────────────────────
