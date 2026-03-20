@@ -155,7 +155,7 @@ func _initialize_game() -> void:
 	_player.add_child(_camera)
 	_camera.enabled = true
 	_camera.position_smoothing_enabled = true
-	_camera.position_smoothing_speed = 5.0
+	_camera.position_smoothing_speed = 12.0
 	_camera.limit_left = 0
 	_camera.limit_top = 0
 	_camera.limit_right = int(MAP_SIZE.x)
@@ -298,16 +298,14 @@ func spawn_enemy(etype: String, pos: Vector2) -> void:
 	if enemy_scene == null:
 		return
 	var enemy: Node = enemy_scene.instantiate()
+	# 修正 #69：先設定 type/HP 再 add_child
+	# 讓 _ready() -> _apply_type_defaults() 以正確種類計算 speed/contact_damage
+	enemy.set("enemy_type", etype)
+	var base_hp: float = _get_base_hp(etype)
+	var hp_mult: float = _get_hp_multiplier()
+	enemy.set("max_hp", base_hp * hp_mult)
 	add_child(enemy)
 	enemy.global_position = pos
-	if enemy.has_method("set"):
-		enemy.set("enemy_type", etype)
-		# DIFF-03：套用難度 HP 倍率
-		var base_hp: float = _get_base_hp(etype)
-		var hp_mult: float = _get_hp_multiplier()
-		enemy.set("max_hp", base_hp * hp_mult)
-		enemy.set("speed", 0.0)  ## 讓 Enemy._apply_type_defaults 決定
-		enemy.set("contact_damage", 0.0)
 	if enemy.has_signal("enemy_died"):
 		enemy.enemy_died.connect(_on_enemy_died)
 
@@ -316,14 +314,11 @@ func spawn_enemy_split(etype: String, pos: Vector2, split_hp: float) -> void:
 	if enemy_scene == null:
 		return
 	var enemy: Node = enemy_scene.instantiate()
+	enemy.set("enemy_type", etype)
+	enemy.set("max_hp", split_hp)
+	enemy.set("is_split_girl", true)
 	add_child(enemy)
 	enemy.global_position = pos
-	if enemy.has_method("set"):
-		enemy.set("enemy_type", etype)
-		enemy.set("max_hp", split_hp)
-		enemy.set("is_split_girl", true)
-		enemy.set("speed", 0.0)
-		enemy.set("contact_damage", 0.0)
 	if enemy.has_signal("enemy_died"):
 		enemy.enemy_died.connect(_on_enemy_died)
 
