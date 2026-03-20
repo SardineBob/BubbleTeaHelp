@@ -1,0 +1,72 @@
+{
+  "pearl_add": {
+    "name": "珍珠加量",
+    "desc": "子彈數量 +1",
+    "max_level": 5,
+    "rarity": "common",
+    "effect": "bullet_count_plus_1"
+  },
+  "max_hp": {
+    "name": "特濃奶茶",
+    "desc": "最大HP +20",
+    "max_level": 5,
+    "rarity": "common",
+    "effect": "max_hp_plus_20"
+  },
+  "speed": {
+    "name": "輕盈杯身",
+    "desc": "移速 +15%",
+    "max_level": 3,
+    "rarity": "common",
+    "effect": "speed_plus_15pct"
+  },
+  "defense": {
+    "name": "奶蓋防禦",
+    "desc": "受傷 -10%",
+    "max_level": 5,
+    "rarity": "rare",
+    "effect": "damage_reduce_10pct"
+  },
+  "bullet_speed": {
+    "name": "QQ彈力",
+    "desc": "子彈速度 +20%",
+    "max_level": 3,
+    "rarity": "rare",
+    "effect": "bullet_speed_plus_20pct"
+  },
+  "fire_rate": {
+    "name": "糖分暴衝",
+    "desc": "射擊冷卻 -0.05s",
+    "max_level": 5,
+    "rarity": "rare",
+    "effect": "cooldown_minus_0_05s"
+  },
+  "pickup_range": {
+    "name": "磁石珍珠",
+    "desc": "拾取範圍 +50px",
+    "max_level": 3,
+    "rarity": "common",
+    "effect": "pickup_range_plus_50px"
+  },
+  "pearl_burst": {
+    "name": "珍珠爆裂",
+    "desc": "擊殺爆炸 +10%",
+    "max_level": 3,
+    "rarity": "epic",
+    "effect": "kill_explosion_plus_10pct"
+  },
+  "range": {
+    "name": "吸管延伸",
+    "desc": "攻擊射程 +25%",
+    "max_level": 3,
+    "rarity": "rare",
+    "effect": "range_plus_25pct"
+  },
+  "lifesteal": {
+    "name": "回收紙吸管",
+    "desc": "擊殺回血 1HP",
+    "max_level": 3,
+    "rarity": "epic",
+    "effect": "kill_heal_1hp"
+  }
+}

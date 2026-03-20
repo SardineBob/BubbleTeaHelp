@@ -1,0 +1,76 @@
+{
+  "black_sugar": {
+    "name": "黑糖珍珠",
+    "damage": 1,
+    "cooldown": 0.35,
+    "bullet_speed": 350,
+    "range": 500,
+    "piercing": false,
+    "explosive": false,
+    "homing": false,
+    "spread": 0,
+    "unlock_condition": "initial"
+  },
+  "matcha": {
+    "name": "抹茶珍珠",
+    "damage": 2,
+    "cooldown": 0.55,
+    "bullet_speed": 300,
+    "range": 500,
+    "piercing": false,
+    "explosive": false,
+    "homing": false,
+    "spread": 0,
+    "unlock_condition": "kill_50"
+  },
+  "taro": {
+    "name": "芋頭珍珠",
+    "damage": 1,
+    "cooldown": 0.50,
+    "bullet_speed": 280,
+    "range": 500,
+    "piercing": false,
+    "explosive": false,
+    "homing": false,
+    "spread": 3,
+    "spread_angle": 0.4,
+    "unlock_condition": "level_5"
+  },
+  "popping_boba": {
+    "name": "黑糖爆爆珠",
+    "damage": 3,
+    "cooldown": 0.80,
+    "bullet_speed": 250,
+    "range": 500,
+    "piercing": false,
+    "explosive": true,
+    "explosion_radius": 80,
+    "homing": false,
+    "spread": 0,
+    "unlock_condition": "boss_kill"
+  },
+  "oat": {
+    "name": "燕麥珍珠",
+    "damage": 1,
+    "cooldown": 0.15,
+    "bullet_speed": 500,
+    "range": 500,
+    "piercing": true,
+    "explosive": false,
+    "homing": false,
+    "spread": 0,
+    "unlock_condition": "survive_15min"
+  },
+  "strawberry": {
+    "name": "限定草莓珍珠",
+    "damage": 5,
+    "cooldown": 1.20,
+    "bullet_speed": 200,
+    "range": 600,
+    "piercing": false,
+    "explosive": false,
+    "homing": true,
+    "spread": 0,
+    "unlock_condition": "seasonal_event"
+  }
+}

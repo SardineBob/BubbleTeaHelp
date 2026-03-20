@@ -1,0 +1,44 @@
+{
+  "passerby": {
+    "hp": 4,
+    "speed": 80,
+    "contact_damage": 5,
+    "xp_drop": 2,
+    "first_appear": 0
+  },
+  "grandma": {
+    "hp": 6,
+    "speed": 50,
+    "contact_damage": 8,
+    "xp_drop": 4,
+    "first_appear": 120
+  },
+  "little_girl": {
+    "hp": 1,
+    "speed": 130,
+    "contact_damage": 3,
+    "xp_drop": 1,
+    "first_appear": 180
+  },
+  "bbt_fan": {
+    "hp": 5,
+    "speed": 100,
+    "contact_damage": 7,
+    "xp_drop": 3,
+    "first_appear": 300
+  },
+  "gym_bro": {
+    "hp": 15,
+    "speed": 60,
+    "contact_damage": 15,
+    "xp_drop": 6,
+    "first_appear": 480
+  },
+  "boss_lady": {
+    "hp": 20,
+    "speed": 90,
+    "contact_damage": 12,
+    "xp_drop": 20,
+    "first_appear": 600
+  }
+}
