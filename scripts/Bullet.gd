@@ -86,7 +86,7 @@ func _on_area_entered(area: Node) -> void:
 # ── COMBAT-03：範圍爆炸 ───────────────────────────────────
 func _explode() -> void:
 	# 對爆炸半徑內所有敵人造成傷害
-	var enemies: Array = get_tree().get_nodes_in_group("enemy")
+	var enemies: Array[Node] = get_tree().get_nodes_in_group("enemy")
 	for enemy in enemies:
 		# 防止對已命中的敵人重複傷害（穿透爆炸情況）
 		if enemy in _hit_enemies:

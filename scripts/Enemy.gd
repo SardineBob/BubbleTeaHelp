@@ -32,7 +32,7 @@ func _ready() -> void:
 
 	# 取得玩家參考（等一幀確保 World 場景完成初始化）
 	await get_tree().process_frame
-	var players: Array = get_tree().get_nodes_in_group("player")
+	var players: Array[Node] = get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
 		_player = players[0]
 
@@ -93,7 +93,7 @@ func _try_pearl_burst_explosion() -> void:
 	if _player.has_method("get_weapon_damage"):
 		explosion_damage = _player.get_weapon_damage()
 
-	var enemies: Array = get_tree().get_nodes_in_group("enemy")
+	var enemies: Array[Node] = get_tree().get_nodes_in_group("enemy")
 	for enemy in enemies:
 		if enemy == self:
 			continue

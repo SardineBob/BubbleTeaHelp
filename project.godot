@@ -17,7 +17,7 @@ config/name_localized={
 config/description="珍奶 Help - 一個以珍珠奶茶為主題的遊戲"
 run/main_scene="res://scenes/World.tscn"
 config/use_custom_user_dir=false
-config/features=PackedStringArray("4.2", "GL Compatibility")
+config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [display]

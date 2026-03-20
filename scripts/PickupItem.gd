@@ -27,7 +27,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	# 尋找玩家節點
-	var players: Array = get_tree().get_nodes_in_group("player")
+	var players: Array[Node] = get_tree().get_nodes_in_group("player")
 	if players.is_empty():
 		return
 
