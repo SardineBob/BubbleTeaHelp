@@ -18,7 +18,7 @@
 extends CharacterBody2D
 
 # ── 移動設定（PLAYER-02）─────────────────────────────────
-@export var speed: float = 120.0
+@export var speed: float = 200.0
 @export var map_bounds: Rect2 = Rect2(0.0, 0.0, 3200.0, 3200.0)
 
 # ── 生命值（PLAYER-04/05/06）────────────────────────────
@@ -116,6 +116,7 @@ var kill_count: int = 0
 
 
 func _ready() -> void:
+	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	add_to_group("player")
 	hp = max_hp
 	# 初始化武器冷卻
