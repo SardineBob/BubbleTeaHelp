@@ -68,6 +68,7 @@ var _timer_label: Node = null
 var _boss_bar: Node = null
 var _overlay: Node = null
 var _upgrade_ui: Node = null
+var _upgrade_system: Node = null
 var _pause_menu: Node = null
 
 # ── DATA-01：載入的 JSON 數值 ─────────────────────────────
@@ -198,6 +199,11 @@ func _initialize_game() -> void:
 		_boss_bar = _hud.get_node_or_null("BossBarContainer")
 		_overlay = _hud.get_node_or_null("Overlay")
 		_upgrade_ui = _hud.get_node_or_null("UpgradePanel")
+
+	# UPGRADE-03：建立升級系統
+	var upgrade_script = load("res://scripts/UpgradeSystem.gd")
+	_upgrade_system = upgrade_script.new()
+	add_child(_upgrade_system)
 
 	# DIFF-01：初始化難度
 	_difficulty = 1.0
@@ -437,11 +443,77 @@ func _on_boss_died() -> void:
 func _on_level_up(lv: int) -> void:
 	print("[UPGRADE-03] 等級提升至 ", lv, "，顯示升級介面")
 	get_tree().paused = true
-	## 實際介面需要 UpgradeUI 場景；此處僅暫停並 log
-	## TODO：實例化 UpgradeUI 場景，顯示 3 張卡牌
-	## 測試環境下自動套用（避免卡關）：
-	await get_tree().create_timer(0.1).timeout
+
+	if _upgrade_system == null:
+		await get_tree().create_timer(0.1).timeout
+		get_tree().paused = false
+		return
+
+	var cards: Array = _upgrade_system.draw_upgrade_cards(_player)
+	if cards.is_empty():
+		get_tree().paused = false
+		return
+
+	_show_upgrade_panel(cards, lv)
+
+
+# ── UPGRADE-03：建立升級選擇 UI ──────────────────────────
+func _show_upgrade_panel(cards: Array, lv: int) -> void:
+	if _upgrade_ui == null:
+		get_tree().paused = false
+		return
+
+	# 清除舊有子節點
+	for child in _upgrade_ui.get_children():
+		child.queue_free()
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 12)
+	_upgrade_ui.add_child(vbox)
+
+	var title := Label.new()
+	title.text = "⬆️  升級！選擇一個技能（Lv.%d）" % lv
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 20)
+	vbox.add_child(title)
+
+	var rarity_icons: Dictionary = {"common": "⭐", "rare": "💎", "epic": "✨"}
+	for card in cards:
+		var btn := Button.new()
+		var icon: String = rarity_icons.get(card.get("rarity", "common"), "⭐")
+		var cur_lv: int = card.get("current_level", 0)
+		btn.text = "%s %s  Lv.%d→%d\n   %s" % [icon, card["name"], cur_lv, cur_lv + 1, card["desc"]]
+		btn.custom_minimum_size = Vector2(280, 70)
+		btn.add_theme_font_size_override("font_size", 16)
+		btn.pressed.connect(_on_upgrade_chosen.bind(card["id"]))
+		vbox.add_child(btn)
+
+	if _upgrade_system.get_reroll_count() > 0:
+		var reroll_btn := Button.new()
+		reroll_btn.text = "🎲  重抽（剩餘 %d 次）" % _upgrade_system.get_reroll_count()
+		reroll_btn.pressed.connect(_on_upgrade_reroll.bind(lv))
+		vbox.add_child(reroll_btn)
+
+	if _hud != null and _hud.has_method("show_upgrade_panel"):
+		_hud.show_upgrade_panel()
+
+
+# ── UPGRADE-04：選擇升級卡牌 ─────────────────────────────
+func _on_upgrade_chosen(upgrade_id: String) -> void:
+	if _upgrade_system != null:
+		_upgrade_system.choose_upgrade(upgrade_id, _player)
+	if _hud != null and _hud.has_method("hide_upgrade_panel"):
+		_hud.hide_upgrade_panel()
 	get_tree().paused = false
+
+
+# ── UPGRADE-05：重抽升級卡牌 ─────────────────────────────
+func _on_upgrade_reroll(lv: int) -> void:
+	if _upgrade_system == null:
+		return
+	var cards: Array = _upgrade_system.try_reroll(_player)
+	if not cards.is_empty():
+		_show_upgrade_panel(cards, lv)
 
 
 # ── FLOW-02/03：暫停/恢復 ───────────────────────────────
@@ -456,16 +528,142 @@ func _on_player_died() -> void:
 	_is_game_over = true
 	print("[World] 玩家死亡！等待 FLOW-04 死亡結算...")
 	await get_tree().create_timer(2.0).timeout
-	## FLOW-04：顯示死亡結算畫面
-	## get_tree().change_scene_to_file("res://scenes/DeathScreen.tscn")
-	print("[FLOW-04] 死亡結算（場景尚未實作，請手動切換）")
+	get_tree().paused = false
+	_show_death_screen()
+
+
+# ── FLOW-04：顯示死亡結算畫面（程式化建立覆蓋層）────────
+func _show_death_screen() -> void:
+	var canvas := CanvasLayer.new()
+	canvas.layer = 10
+	add_child(canvas)
+
+	var bg := ColorRect.new()
+	bg.color = Color(0.0, 0.0, 0.0, 0.85)
+	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	canvas.add_child(bg)
+
+	var center := CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	canvas.add_child(center)
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 16)
+	center.add_child(vbox)
+
+	var title := Label.new()
+	title.text = "💀  遊戲結束"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 36)
+	vbox.add_child(title)
+
+	var mins: int = int(_game_time) / 60
+	var secs: int = int(_game_time) % 60
+
+	var time_lbl := Label.new()
+	time_lbl.text = "生存時間：%02d:%02d" % [mins, secs]
+	time_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	time_lbl.add_theme_font_size_override("font_size", 24)
+	vbox.add_child(time_lbl)
+
+	var kill_lbl := Label.new()
+	kill_lbl.text = "擊殺數：" + str(_player.kill_count if _player != null else 0)
+	kill_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	kill_lbl.add_theme_font_size_override("font_size", 24)
+	vbox.add_child(kill_lbl)
+
+	var level_lbl := Label.new()
+	level_lbl.text = "最終等級：" + str(_player.level if _player != null else 1)
+	level_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	level_lbl.add_theme_font_size_override("font_size", 24)
+	vbox.add_child(level_lbl)
+
+	var spacer := Control.new()
+	spacer.custom_minimum_size = Vector2(0, 20)
+	vbox.add_child(spacer)
+
+	var retry_btn := Button.new()
+	retry_btn.text = "🔄  再玩一次"
+	retry_btn.add_theme_font_size_override("font_size", 22)
+	retry_btn.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/World.tscn"))
+	vbox.add_child(retry_btn)
+
+	var menu_btn := Button.new()
+	menu_btn.text = "🏠  返回主選單"
+	menu_btn.add_theme_font_size_override("font_size", 22)
+	menu_btn.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/MainMenu.tscn"))
+	vbox.add_child(menu_btn)
+
+	print("[FLOW-04] 死亡結算 - 時間：%02d:%02d，擊殺：%d，等級：%d" % [mins, secs,
+		_player.kill_count if _player != null else 0,
+		_player.level if _player != null else 1])
 
 
 # ── FLOW-05：勝利 ────────────────────────────────────────
 func _win_game() -> void:
 	_is_game_over = true
-	print("[FLOW-05] 勝利！生存時間：", _game_time / 60.0, " 分鐘")
-	## get_tree().change_scene_to_file("res://scenes/WinScreen.tscn")
+	get_tree().paused = false
+	_show_win_screen()
+
+
+# ── FLOW-05：顯示勝利畫面（程式化建立覆蓋層）────────────
+func _show_win_screen() -> void:
+	var canvas := CanvasLayer.new()
+	canvas.layer = 10
+	add_child(canvas)
+
+	var bg := ColorRect.new()
+	bg.color = Color(0.0, 0.2, 0.0, 0.85)
+	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	canvas.add_child(bg)
+
+	var center := CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	canvas.add_child(center)
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 16)
+	center.add_child(vbox)
+
+	var title := Label.new()
+	title.text = "🏆  恭喜獲勝！"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 36)
+	vbox.add_child(title)
+
+	var mins: int = int(_game_time) / 60
+	var secs: int = int(_game_time) % 60
+
+	var time_lbl := Label.new()
+	time_lbl.text = "生存時間：%02d:%02d" % [mins, secs]
+	time_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	time_lbl.add_theme_font_size_override("font_size", 24)
+	vbox.add_child(time_lbl)
+
+	var kill_lbl := Label.new()
+	kill_lbl.text = "擊殺數：" + str(_player.kill_count if _player != null else 0)
+	kill_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	kill_lbl.add_theme_font_size_override("font_size", 24)
+	vbox.add_child(kill_lbl)
+
+	var spacer := Control.new()
+	spacer.custom_minimum_size = Vector2(0, 20)
+	vbox.add_child(spacer)
+
+	var retry_btn := Button.new()
+	retry_btn.text = "🔄  再玩一次"
+	retry_btn.add_theme_font_size_override("font_size", 22)
+	retry_btn.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/World.tscn"))
+	vbox.add_child(retry_btn)
+
+	var menu_btn := Button.new()
+	menu_btn.text = "🏠  返回主選單"
+	menu_btn.add_theme_font_size_override("font_size", 22)
+	menu_btn.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/MainMenu.tscn"))
+	vbox.add_child(menu_btn)
+
+	print("[FLOW-05] 勝利！生存時間：%02d:%02d，擊殺：%d" % [mins, secs,
+		_player.kill_count if _player != null else 0])
 
 
 # ── ENEMY-08：老闆娘杯子（讓 Enemy 呼叫）────────────────
