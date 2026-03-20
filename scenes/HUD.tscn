@@ -1,0 +1,91 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/HUD.gd" id="1_hud_script"]
+
+[node name="HUD" type="CanvasLayer"]
+## HUD 介面，覆蓋於遊戲畫面上方
+script = ExtResource("1_hud_script")
+layer = 10
+
+[node name="HPBar" type="ProgressBar" parent="."]
+## HUD-01：HP 血條
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 250.0
+offset_bottom = 30.0
+min_value = 0.0
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="XPBar" type="ProgressBar" parent="."]
+## HUD-02：XP 條
+offset_left = 10.0
+offset_top = 36.0
+offset_right = 250.0
+offset_bottom = 52.0
+min_value = 0.0
+max_value = 100.0
+value = 0.0
+show_percentage = false
+
+[node name="LevelLabel" type="Label" parent="."]
+## 等級顯示
+offset_left = 256.0
+offset_top = 10.0
+offset_right = 350.0
+offset_bottom = 52.0
+text = "Lv.1"
+
+[node name="KillLabel" type="Label" parent="."]
+## HUD-03：擊殺計數
+offset_left = 10.0
+offset_top = 58.0
+offset_right = 250.0
+offset_bottom = 76.0
+text = "Kills: 0"
+
+[node name="TimerLabel" type="Label" parent="."]
+## HUD-04：遊戲計時器
+offset_right = 1280.0
+offset_top = 10.0
+offset_bottom = 36.0
+horizontal_alignment = 1
+text = "00:00"
+
+[node name="BossBarContainer" type="VBoxContainer" parent="."]
+## HUD-05：Boss 血條容器（預設隱藏）
+offset_left = 340.0
+offset_top = 10.0
+offset_right = 940.0
+offset_bottom = 50.0
+visible = false
+
+[node name="BossNameLabel" type="Label" parent="BossBarContainer"]
+text = "Boss"
+horizontal_alignment = 1
+
+[node name="BossHPBar" type="ProgressBar" parent="BossBarContainer"]
+## Boss 血條
+layout_mode = 2
+min_value = 0.0
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="Overlay" type="ColorRect" parent="."]
+## HUD-06：升級介面遮罩（預設隱藏）
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0.0, 0.0, 0.0, 0.5)
+visible = false
+
+[node name="UpgradePanel" type="Control" parent="."]
+## 升級介面面板（預設隱藏）
+offset_left = 240.0
+offset_top = 160.0
+offset_right = 1040.0
+offset_bottom = 560.0
+visible = false

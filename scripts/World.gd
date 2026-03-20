@@ -150,7 +150,7 @@ func _initialize_game() -> void:
 	if _player.has_signal("kill_count_changed"):
 		_player.kill_count_changed.connect(_on_kill_count_changed)
 
-	# MAP-02：相機
+	# MAP-02：相機（修正 #65：呼叫 make_current() 確保此相機為主相機）
 	_camera = Camera2D.new()
 	_player.add_child(_camera)
 	_camera.enabled = true
@@ -160,6 +160,20 @@ func _initialize_game() -> void:
 	_camera.limit_top = 0
 	_camera.limit_right = int(MAP_SIZE.x)
 	_camera.limit_bottom = int(MAP_SIZE.y)
+	_camera.make_current()
+
+	# HUD-01~06：動態載入 HUD 場景
+	if ResourceLoader.exists("res://scenes/HUD.tscn"):
+		var hud_scene: PackedScene = load("res://scenes/HUD.tscn")
+		_hud = hud_scene.instantiate()
+		add_child(_hud)
+		_hp_bar = _hud.get_node_or_null("HPBar")
+		_xp_bar = _hud.get_node_or_null("XPBar")
+		_kill_label = _hud.get_node_or_null("KillLabel")
+		_timer_label = _hud.get_node_or_null("TimerLabel")
+		_boss_bar = _hud.get_node_or_null("BossBarContainer")
+		_overlay = _hud.get_node_or_null("Overlay")
+		_upgrade_ui = _hud.get_node_or_null("UpgradePanel")
 
 	# DIFF-01：初始化難度
 	_difficulty = 1.0

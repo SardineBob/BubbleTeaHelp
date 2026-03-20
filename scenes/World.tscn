@@ -8,15 +8,10 @@
 script = ExtResource("1_world_script")
 
 [node name="Background" type="ColorRect" parent="."]
-## 背景：淺米色，代表地圖底色
+## 背景：淺米色，覆蓋完整 3200x3200 地圖（修正 #65 空白畫面）
 offset_left = 0.0
 offset_top = 0.0
-offset_right = 1280.0
-offset_bottom = 720.0
+offset_right = 3200.0
+offset_bottom = 3200.0
 color = Color(0.949, 0.929, 0.878, 1.0)
 z_index = -1
-
-[node name="Camera2D" type="Camera2D" parent="."]
-## 主攝影機，預設跟隨視窗中心
-## 若需跟隨玩家，可在 World.gd 中將 camera.reparent(_player)
-position = Vector2(640, 360)
