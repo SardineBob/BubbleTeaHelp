@@ -5,6 +5,7 @@
 ## PLAYER-04：受到敵人接觸傷害（每 0.5 秒最多一次）
 ## PLAYER-05：回血（不超過 max_hp）
 ## PLAYER-06：HP 歸零觸發死亡流程
+## UPGRADE-04（介面）：珍珠爆裂等級，供 COMBAT-05 查詢
 
 extends CharacterBody2D
 
@@ -25,6 +26,10 @@ var _dmg_timer: float = 0.0
 
 # ── 死亡狀態（PLAYER-06）────────────────────────────────
 var _is_dead: bool = false
+
+# ── UPGRADE-04：珍珠爆裂升級等級（COMBAT-05 查詢用）────
+## 由升級系統呼叫 upgrade_pearl_burst() 提升；0 = 未習得
+var _pearl_burst_level: int = 0
 
 # ── 碰撞尺寸（for boundary clamp）───────────────────────
 const _HALF_W: float = 16.0
@@ -132,3 +137,16 @@ func _flash_red() -> void:
 	await get_tree().create_timer(0.1).timeout
 	if not _is_dead:
 		_sprite.color = Color(0.502, 0.333, 0.169, 1.0)
+
+
+# ── UPGRADE-04：珍珠爆裂等級介面（供 COMBAT-05 使用）────
+
+## 查詢珍珠爆裂目前等級
+func get_pearl_burst_level() -> int:
+	return _pearl_burst_level
+
+
+## 升級珍珠爆裂一層（由升級系統呼叫）
+func upgrade_pearl_burst() -> void:
+	_pearl_burst_level += 1
+	print("[UPGRADE-04] 珍珠爆裂升至 Lv.", _pearl_burst_level, "，擊殺爆炸機率：", _pearl_burst_level * 10, "%")
