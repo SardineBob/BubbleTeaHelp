@@ -7,13 +7,18 @@
 extends Node2D
 
 # ── 匯出變數 ──────────────────────────────────────────────
-@export var player_scene: PackedScene = preload("res://scenes/Player.tscn")
+## 玩家場景；可在 Inspector 指定，若未指定則由程式碼自動載入
+@export var player_scene: PackedScene
 
 # ── 節點參考 ──────────────────────────────────────────────
 var _player: CharacterBody2D = null
 
 
 func _ready() -> void:
+	# 若 Inspector 未指定，自動以 load() 載入（避免 preload parse-time 失敗）
+	if player_scene == null:
+		player_scene = load("res://scenes/Player.tscn")
+
 	var viewport_size: Vector2 = get_viewport_rect().size
 	var center_pos: Vector2 = viewport_size / 2.0
 
