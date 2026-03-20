@@ -112,7 +112,7 @@ signal kill_count_changed(count: int)
 var kill_count: int = 0
 
 # ── 節點參考 ─────────────────────────────────────────────
-@onready var _sprite: ColorRect = $Sprite
+@onready var _sprite: Label = $Sprite
 
 
 func _ready() -> void:
@@ -259,7 +259,7 @@ func heal_hp(amount: float) -> void:
 func _die() -> void:
 	_is_dead = true
 	velocity = Vector2.ZERO
-	_sprite.color = Color(0.55, 0.55, 0.55, 1.0)
+	_sprite.modulate = Color(0.55, 0.55, 0.55, 1.0)
 	player_died.emit()
 	await get_tree().create_timer(2.0).timeout
 	print("[PLAYER-06] 死亡動畫完成，等待 FLOW-04 切換")
@@ -394,7 +394,7 @@ func get_pickup_range_bonus() -> float:
 
 # ── 受傷閃爍 ─────────────────────────────────────────────
 func _flash_red() -> void:
-	_sprite.color = Color(1.0, 0.2, 0.2, 1.0)
+	_sprite.modulate = Color(1.0, 0.2, 0.2, 1.0)
 	await get_tree().create_timer(0.1).timeout
 	if not _is_dead:
-		_sprite.color = Color(0.502, 0.333, 0.169, 1.0)
+		_sprite.modulate = Color.WHITE

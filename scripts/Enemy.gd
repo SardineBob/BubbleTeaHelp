@@ -49,9 +49,13 @@ var _slow_factor: float = 1.0
 var _slow_timer: float = 0.0
 
 # ── ENEMY-02：視覺 ───────────────────────────────────────
-var _sprite: ColorRect = null
-var _base_color: Color = Color(0.8, 0.2, 0.2, 1.0)
+var _sprite: Label = null
 var _is_flashing: bool = false
+
+# ── PLAYER-04：接觸傷害冷卻 ──────────────────────────────
+const CONTACT_DAMAGE_COOLDOWN: float = 0.5
+const CONTACT_DAMAGE_DIST: float = 50.0
+var _contact_dmg_timer: float = 0.0
 
 # ── 內部狀態 ──────────────────────────────────────────────
 var hp: float = 0.0
@@ -69,6 +73,16 @@ func _ready() -> void:
 
 	if has_node("Sprite"):
 		_sprite = $Sprite
+		# #72：依種類設定 emoji
+		var emoji_map: Dictionary = {
+			"passerby":   "🚶",
+			"grandma":    "👵",
+			"little_girl":"👧",
+			"bbt_fan":    "🥤",
+			"gym_bro":    "🏋️",
+			"boss_lady":  "💁",
+		}
+		_sprite.text = emoji_map.get(enemy_type, "🚶")
 
 	await get_tree().process_frame
 	var players: Array[Node] = get_tree().get_nodes_in_group("player")
@@ -105,6 +119,9 @@ func _physics_process(delta: float) -> void:
 	if _knockback_timer > 0.0:
 		_knockback_timer -= delta
 
+	if _contact_dmg_timer > 0.0:
+		_contact_dmg_timer -= delta
+
 	var dist_to_player: float = global_position.distance_to(_player.global_position)
 
 	# ENEMY-08：老闆娘
@@ -123,6 +140,12 @@ func _physics_process(delta: float) -> void:
 	var dir: Vector2 = (_player.global_position - global_position).normalized()
 	velocity = dir * effective_speed * _slow_factor
 	move_and_slide()
+
+	# PLAYER-04：接觸傷害（距離檢測，不依賴物理碰撞）
+	if _contact_dmg_timer <= 0.0 and dist_to_player < CONTACT_DAMAGE_DIST:
+		if _player.has_method("take_damage"):
+			_player.take_damage(contact_damage)
+		_contact_dmg_timer = CONTACT_DAMAGE_COOLDOWN
 
 	# ENEMY-07：健身大叔擊退
 	if enemy_type == "gym_bro" and _knockback_timer <= 0.0:
@@ -201,11 +224,11 @@ func _flash_white() -> void:
 	if _is_flashing or _sprite == null:
 		return
 	_is_flashing = true
-	var original_color: Color = _sprite.color
-	_sprite.color = Color.WHITE
+	var original_modulate: Color = _sprite.modulate
+	_sprite.modulate = Color(1.0, 0.3, 0.3, 1.0)  # 受傷紅色閃爍
 	await get_tree().create_timer(0.1).timeout
 	if is_instance_valid(self) and _sprite != null:
-		_sprite.color = original_color
+		_sprite.modulate = original_modulate
 	_is_flashing = false
 
 

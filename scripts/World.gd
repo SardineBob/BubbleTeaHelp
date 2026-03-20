@@ -89,6 +89,30 @@ func _ready() -> void:
 	# FLOW-01：初始化遊戲
 	_initialize_game()
 
+	# #72：觸發背景繪製
+	queue_redraw()
+
+
+# ── #72：繪製街道磚格背景 ────────────────────────────────
+const TILE_SIZE: float = 80.0
+func _draw() -> void:
+	var cols: int = int(MAP_SIZE.x / TILE_SIZE) + 1
+	var rows: int = int(MAP_SIZE.y / TILE_SIZE) + 1
+	var color_a: Color = Color(0.78, 0.76, 0.70)   # 淺灰磚
+	var color_b: Color = Color(0.72, 0.70, 0.64)   # 深灰磚
+	for row in range(rows):
+		for col in range(cols):
+			var c: Color = color_a if (row + col) % 2 == 0 else color_b
+			draw_rect(Rect2(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE), c)
+	# 道路標線（橫向虛線）
+	var line_color: Color = Color(0.9, 0.85, 0.55, 0.4)
+	var road_y: float = 0.0
+	while road_y < MAP_SIZE.y:
+		for seg in range(int(MAP_SIZE.x / 80)):
+			if seg % 2 == 0:
+				draw_rect(Rect2(seg * 80.0, road_y - 2.0, 60.0, 4.0), line_color)
+		road_y += 400.0
+
 
 func _load_json_data() -> void:
 	var files: Dictionary = {

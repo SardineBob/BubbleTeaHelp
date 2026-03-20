@@ -97,21 +97,21 @@ func _update_homing(delta: float) -> void:
 	direction = Vector2.from_angle(current_angle + turn)
 
 
-# ── COMBAT-01/02：碰撞區域偵測 ───────────────────────────
-func _on_area_entered(area: Node) -> void:
-	if not area.is_in_group("enemy"):
+# ── COMBAT-01/02：碰撞體偵測（Enemy 是 CharacterBody2D，需用 body_entered）
+func _on_body_entered(body: Node) -> void:
+	if not body.is_in_group("enemy"):
 		return
 
-	if area in _hit_enemies:
+	if body in _hit_enemies:
 		return
 
-	_hit_enemies.append(area)
+	_hit_enemies.append(body)
 
-	if area.has_method("take_damage"):
-		area.take_damage(damage)
+	if body.has_method("take_damage"):
+		body.take_damage(damage)
 
-	if slow_percent > 0.0 and area.has_method("apply_slow"):
-		area.apply_slow(slow_percent, slow_duration)
+	if slow_percent > 0.0 and body.has_method("apply_slow"):
+		body.apply_slow(slow_percent, slow_duration)
 
 	if not piercing:
 		if explosive:
@@ -137,4 +137,4 @@ func _explode() -> void:
 
 
 func _ready() -> void:
-	area_entered.connect(_on_area_entered)
+	body_entered.connect(_on_body_entered)
