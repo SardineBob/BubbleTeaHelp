@@ -114,7 +114,7 @@ func update_kill_count(count: int) -> void:
 func update_timer(seconds: float) -> void:
 	if timer_label == null:
 		return
-	var mins: int = int(seconds) / 60
+	var mins: int = int(seconds / 60.0)
 	var secs: int = int(seconds) % 60
 	timer_label.text = "%02d:%02d" % [mins, secs]
 

@@ -17,7 +17,7 @@ func _ready() -> void:
 
 
 func _display_stats() -> void:
-	var mins: int = int(survival_time) / 60
+	var mins: int = int(survival_time / 60.0)
 	var secs: int = int(survival_time) % 60
 
 	if has_node("TimeLabel"):

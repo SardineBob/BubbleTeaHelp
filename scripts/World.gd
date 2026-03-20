@@ -69,7 +69,6 @@ var _boss_bar: Node = null
 var _overlay: Node = null
 var _upgrade_ui: Node = null
 var _upgrade_system: Node = null
-var _pause_menu: Node = null
 
 # ── DATA-01：載入的 JSON 數值 ─────────────────────────────
 var _enemy_data: Dictionary = {}
@@ -557,7 +556,7 @@ func _show_death_screen() -> void:
 	title.add_theme_font_size_override("font_size", 36)
 	vbox.add_child(title)
 
-	var mins: int = int(_game_time) / 60
+	var mins: int = int(_game_time / 60.0)
 	var secs: int = int(_game_time) % 60
 
 	var time_lbl := Label.new()
@@ -631,7 +630,7 @@ func _show_win_screen() -> void:
 	title.add_theme_font_size_override("font_size", 36)
 	vbox.add_child(title)
 
-	var mins: int = int(_game_time) / 60
+	var mins: int = int(_game_time / 60.0)
 	var secs: int = int(_game_time) % 60
 
 	var time_lbl := Label.new()
